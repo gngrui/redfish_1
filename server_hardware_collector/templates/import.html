@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>导入BMC IP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .nav {
+            margin-bottom: 20px;
+        }
+        .nav a {
+            display: inline-block;
+            margin-right: 10px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+        }
+        .nav a:hover {
+            background-color: #0069d9;
+        }
+        form {
+            margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            resize: vertical;
+            min-height: 200px;
+        }
+        input[type="submit"] {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+            margin-left: 10px;
+        }
+        .button:hover {
+            background-color: #5a6268;
+        }
+        .flash {
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>导入BMC IP</h1>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <div class="nav">
+            <a href="/">服务器列表</a>
+            <a href="/import">导入BMC IP</a>
+            <a href="/scan">扫描服务器</a>
+        </div>
+        
+        <form method="POST">
+            <label for="username">默认用户名：</label>
+            <input type="text" id="username" name="username" value="admin" placeholder="默认用户名">
+            <br><br>
+            <label for="password">默认密码：</label>
+            <input type="password" id="password" name="password" value="admin" placeholder="默认密码">
+            <br><br>
+            <label for="ips">BMC IP地址（每行一个，格式：IP或IP,用户名,密码）：</label>
+            <textarea id="ips" name="ips" placeholder="请输入BMC IP地址，每行一个，或使用IP,用户名,密码格式"></textarea>
+            <br><br>
+            <input type="submit" value="导入">
+            <a href="/" class="button">返回主页面</a>
+        </form>
+    </div>
+</body>
+</html>

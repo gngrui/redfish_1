@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>服务器硬件资源管理</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .nav {
+            margin-bottom: 20px;
+        }
+        .nav a {
+            display: inline-block;
+            margin-right: 10px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+        }
+        .nav a:hover {
+            background-color: #0069d9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .flash {
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>服务器硬件资源管理</h1>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <div class="nav">
+            <a href="/">服务器列表</a>
+            <a href="/import">导入BMC IP</a>
+            <a href="/scan">扫描服务器</a>
+        </div>
+        
+        <h2>服务器列表</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>BMC IP</th>
+                    <th>用户名</th>
+                    <th>密码</th>
+                    <th>主机名</th>
+                    <th>型号</th>
+                    <th>序列号</th>
+                    <th>CPU信息</th>
+                    <th>内存信息</th>
+                    <th>存储信息</th>
+                    <th>网卡信息</th>
+                    <th>电源信息</th>
+                    <th>温度风扇</th>
+                    <th>固件信息</th>
+                    <th>日志信息</th>
+                    <th>最后更新</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for server in servers %}
+                <tr>
+                    <td>{{ server[0] }}</td>
+                    <td>{{ server[1] }}</td>
+                    <td>{{ server[2] }}</td>
+                    <td>{{ server[3] }}</td>
+                    <td>{{ server[4] }}</td>
+                    <td>{{ server[5] }}</td>
+                    <td>{{ server[6] }}</td>
+                    <td>{{ server[7] }}</td>
+                    <td>{{ server[8] }}</td>
+                    <td>{{ server[9] }}</td>
+                    <td>{{ server[10] }}</td>
+                    <td>{{ server[11] }}</td>
+                    <td>{{ server[12] }}</td>
+                    <td>{{ server[13] }}</td>
+                    <td>{{ server[14] }}</td>
+                    <td>{{ server[15] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
