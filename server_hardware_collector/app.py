@@ -7,6 +7,13 @@ from redfish import RedfishClient
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 
+# 全局变量用于跟踪扫描进度
+scan_progress = {
+    'total': 0,
+    'scanned': 0,
+    'errors': []
+}
+
 # 数据库初始化
 def init_db():
     conn = sqlite3.connect('hardware.db')
@@ -88,12 +95,23 @@ def import_ips():
 
 @app.route('/scan')
 def scan_servers():
+    global scan_progress
+    # 重置进度
+    scan_progress = {
+        'total': 0,
+        'scanned': 0,
+        'errors': []
+    }
+    
     conn = sqlite3.connect('hardware.db')
     c = conn.cursor()
     c.execute('SELECT id, bmc_ip, username, password FROM servers')
     servers = c.fetchall()
     
+    scan_progress['total'] = len(servers)
+    
     for server_id, bmc_ip, username, password in servers:
+        scan_progress['scanned'] += 1
         try:
             # 使用RedfishClient获取硬件信息，使用存储的用户名和密码
             client = RedfishClient(bmc_ip, username, password)
@@ -110,7 +128,8 @@ def scan_servers():
                         power_info = ?, 
                         thermal_info = ?, 
                         firmware_info = ?, 
-                        log_info = ? 
+                        log_info = ?, 
+                        last_updated = CURRENT_TIMESTAMP 
                         WHERE id = ?''', 
                       (hardware_info['hostname'],
                        hardware_info['model'],
@@ -126,11 +145,28 @@ def scan_servers():
                        server_id))
             conn.commit()
         except Exception as e:
+            error_msg = f'{bmc_ip}: {str(e)}'
+            scan_progress['errors'].append(error_msg)
             print(f'Error scanning {bmc_ip}: {e}')
     
     conn.close()
-    flash('Servers scanned successfully!')
+    
+    # 生成扫描结果消息
+    if scan_progress['errors']:
+        error_message = '扫描完成，但以下服务器出现错误：\n' + '\n'.join(scan_progress['errors'])
+        flash(error_message)
+    else:
+        flash(f'成功扫描所有 {scan_progress["total"]} 台服务器！')
+    
+    # 重置进度为完成状态
+    scan_progress['scanned'] = scan_progress['total']
+    
     return redirect(url_for('index'))
+
+@app.route('/scan_progress')
+def get_scan_progress():
+    global scan_progress
+    return scan_progress
 
 if __name__ == '__main__':
     app.run(debug=True)
