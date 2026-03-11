@@ -1,5 +1,5 @@
 # Python
-/__pycache__
+server_hardware_collector/__pycache__/
 *.py[cod]
 *$py.class
 
